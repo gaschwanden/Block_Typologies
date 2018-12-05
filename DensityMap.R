@@ -4,7 +4,6 @@ library(readr)
 library(ggplot2)
 library(scales)
 library('png')
-library(gridExtra)
 
 ### Load Data ####
 
