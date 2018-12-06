@@ -7,7 +7,7 @@ library('png')
 
 ### Load Data ####
 
-rawData <-  read_table2("~/Desktop/Projects/2018_Block_Typologies/Data/AllClusterLocations1MItr_2.csv")
+rawData <-  read_table2("~/Desktop/Projects/2018_Block_Typologies/Data/AllClusterLocations1MItr_4.csv")
 rawData$x = rawData$x +1
 rawData$y = rawData$y +1
 
@@ -37,8 +37,9 @@ getColour2D3D = function (i,j){
 }
 rawData$'colourR,colourG,colourB,TeuColourR,TeuColourG,TeuColourB' = 1
 rawData$'colourR,colourG,colourB,TeuColourR,TeuColourG,TeuColourB' = mapply(getColour2D3D,rawData$x,rawData$y)
-write.csv(rawData, "trained_Som_classified_images_melsyd1MItr_I.csv", row.names = TRUE, quote = FALSE)
-write.csv(clusterData, "clusterXY.csv", row.names = FALSE, quote = FALSE)
+colnames(rawData)[1] <- "image1,image2"
+write.csv(rawData, "~/Desktop/Projects/2018_Block_Typologies/Data/trained_Som_classified_images_melsyd1MItr_I.csv", row.names = TRUE, quote = FALSE)
+write.csv(clusterData, "~/Desktop/Projects/2018_Block_Typologies/Data/clusterXY.csv", row.names = FALSE, quote = FALSE)
 
 ### Data Prep ####
 for (i in 1:nrow(rawData)){
