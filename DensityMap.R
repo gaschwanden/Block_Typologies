@@ -61,6 +61,8 @@ finalData = as.data.frame(finalData)
 names(finalData) = c("x","y","weight","cluster")
 finalData = finalData[-1,] 
 finalData = subset(finalData, finalData$weight>0)
+finalData$x = finalData$x-1
+finalData$y = finalData$y-1
 
 ### Plotting ####
 
