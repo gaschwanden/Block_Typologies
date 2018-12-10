@@ -64,34 +64,39 @@ finalData = subset(finalData, finalData$weight>0)
 finalData$x = finalData$x-1
 finalData$y = finalData$y-1
 
+#finalData = subset(finalData,finalData$weight <10000)
+
+
+
 ### Plotting ####
 
 ggplot(finalData, aes(cluster)) + geom_histogram()
 ggsave("som_histogram.png", width = 6, height = 5)
 
-ggplot(finalData, aes(x,y)) + geom_raster(aes(fill = weight), interpolate = FALSE) 
+ggplot(finalData, aes(x,y))+ scale_y_reverse() + geom_raster(aes(fill = weight), interpolate = FALSE) 
 ggsave("som_Density.png", width = 6, height = 5)
 
-ggplot(finalData, aes(x, y, fill = log(weight))) + geom_raster() + scale_fill_gradient(low = "red",high = "black") 
+ggplot(finalData, aes(x, y, fill = log(weight))) + geom_raster() + scale_y_reverse()+scale_fill_gradient(low = "white",high = "black") 
 ggsave("som_Density_log.png", width = 6, height = 5)
 
-ggplot(finalData, aes(x, y, fill = cluster)) + geom_raster() + scale_fill_gradientn(colours=c("#0000FFFF", "#f4d03f","#2e4053","#7d6608","#FF0000FF","#0000FFFF"))
+ggplot(finalData, aes(x, y, fill = cluster)) + scale_y_reverse() +geom_raster() + scale_fill_gradientn(colours=c("#0000FFFF", "#f4d03f","#2e4053","#7d6608","#FF0000FF","#0000FFFF"))
 ggsave("som_clusters_.png", width = 6, height = 5)
 
-ggplot(rawData, aes(x=x)) + geom_density()
-ggplot(rawData, aes(x=y)) + geom_density()
+ggplot(rawData, aes(x=x)) + geom_bar() 
+ggplot(rawData, aes(x=y)) + geom_bar() 
 
 
 ggplot(finalData, aes(x,y)) + 
   geom_raster(aes(fill = weight), interpolate = FALSE) +
-  scale_fill_gradientn( colours=c("#0000FFFF", "#f4d03f","#2e4053","#7d6608","#FF0000FF"), limits=c(0,4))
+  scale_fill_gradientn( colours=c("grey","yellow","blue"), limits=c(0,1000))
+ggsave("som_Density_cliped_1000.png", width = 6, height = 5)
 
 
 ### get cluster centres ####
 
 ### urlStringImputBase = "http://10.100.8.30:5002/~thud/projects/city_typology/download_new_style/"
 
-for(i in 0:max(rawData$cluster)){
+#for(i in 0:max(rawData$cluster)){
   tempData = subset(rawData, rawData$cluster == i)
   tempDataOne = tempData[which.min(tempData$distance),]
   print(i)
@@ -108,10 +113,10 @@ minClipNumber = 10000
 tempSomDensity = subset(finalData, finalData$weight>minClipNumber)
 
 for(i in 1 :nrow(tempSomDensity)){
-  highDensityPoint = which(rawData$x == tempSomDensity[i,]$x & rawData$y ==  tempSomDensity[i,]$y)
+  highDensityPoint = which(rawData$x == tempSomDensity[i,]$x+1 & rawData$y ==  tempSomDensity[i,]$y+1)
   highDensityPoint = highDensityPoint[1]
-  rawData[highDensityPoint,]$image
+  rawData[highDensityPoint,]$`image1,image2`
   #highDensityPoint = c(tempSomDensity[i,]$x,tempSomDensity[i,]$y)
   print(tempSomDensity[i,]$cluster)
-  print(rawData[highDensityPoint,]$image)
+  print(rawData[highDensityPoint,]$`image1,image2`)
 }
