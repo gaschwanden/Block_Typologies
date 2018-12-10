@@ -7,7 +7,7 @@ library('png')
 
 ### Load Data ####
 
-rawData <-  read_table2("~/Desktop/Projects/2018_Block_Typologies/Data/AllClusterLocations1MItr_4.csv")
+rawData <-  read_table2("~/Desktop/Projects/2018_Block_Typologies/Data/AllClusterLocations1MItr_5.csv")
 rawData$x = rawData$x +1
 rawData$y = rawData$y +1
 
