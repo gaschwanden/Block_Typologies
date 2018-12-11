@@ -73,13 +73,13 @@ finalData$y = finalData$y-1
 ggplot(finalData, aes(cluster)) + geom_histogram()
 ggsave("som_histogram.png", width = 6, height = 5)
 
-ggplot(finalData, aes(x,y))+ scale_y_reverse() + geom_raster(aes(fill = weight), interpolate = FALSE) 
+ggplot(finalData, aes(x,y))+ scale_y_reverse() + geom_raster(aes(fill = weight), interpolate = FALSE) +scale_fill_gradient(low = "black",high = "red", limits=c(0,10000))
 ggsave("som_Density.png", width = 6, height = 5)
 
-ggplot(finalData, aes(x, y, fill = log(weight))) + geom_raster() + scale_y_reverse()+scale_fill_gradient(low = "white",high = "black") 
+ggplot(finalData, aes(x, y, fill = log(weight))) + geom_raster() + scale_y_reverse()+scale_fill_gradient(low = "white",high = "darkblue") 
 ggsave("som_Density_log.png", width = 6, height = 5)
 
-ggplot(finalData, aes(x, y, fill = cluster)) + scale_y_reverse() +geom_raster() + scale_fill_gradientn(colours=c("#0000FFFF", "#f4d03f","#2e4053","#7d6608","#FF0000FF","#0000FFFF"))
+ggplot(finalData, aes(x, y, fill = cluster)) + scale_y_reverse() +geom_raster() + scale_fill_gradientn(colours=c("Black", "#f4d03f","yellow","Blue","Red","darkBlue","#0000FFFF","Green","Purple"))
 ggsave("som_clusters_.png", width = 6, height = 5)
 
 ggplot(rawData, aes(x=x)) + geom_bar() 
