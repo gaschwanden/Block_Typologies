@@ -7,7 +7,7 @@ library('png')
 
 ### Load Data ####
 
-rawData <-  read_table2("~/Desktop/Projects/2018_Block_Typologies/Data/AllClusterLocations1MItr_5.csv")
+rawData <-  read_table2("~/Desktop/Projects/2018_Block_Typologies/Data/AllClusterLocations_22Dec2018.csv")
 rawData$x = rawData$x +1
 rawData$y = rawData$y +1
 
@@ -73,10 +73,10 @@ finalData$y = finalData$y-1
 ggplot(finalData, aes(cluster)) + geom_histogram()
 ggsave("som_histogram.png", width = 6, height = 5)
 
-ggplot(finalData, aes(x,y))+ scale_y_reverse() + geom_raster(aes(fill = weight), interpolate = FALSE) +scale_fill_gradient(low = "black",high = "red", limits=c(0,10000))
+ggplot(finalData, aes(x,y))+ scale_y_reverse() + geom_raster(aes(fill = weight), interpolate = FALSE) +scale_fill_gradient(low = "black",high = "red", limits=c(0,25000))
 ggsave("som_Density.png", width = 6, height = 5)
 
-ggplot(finalData, aes(x, y, fill = log(weight))) + geom_raster() + scale_y_reverse()+scale_fill_gradient(low = "white",high = "darkblue") 
+ggplot(finalData, aes(x, y, fill = log(weight)))+ scale_y_reverse() + geom_raster() + scale_y_reverse()+scale_fill_gradient(low = "black",high = "red") 
 ggsave("som_Density_log.png", width = 6, height = 5)
 
 ggplot(finalData, aes(x, y, fill = cluster)) + scale_y_reverse() +geom_raster() + scale_fill_gradientn(colours=c("Black", "#f4d03f","yellow","Blue","Red","darkBlue","#0000FFFF","Green","Purple"))
@@ -86,9 +86,9 @@ ggplot(rawData, aes(x=x)) + geom_bar()
 ggplot(rawData, aes(x=y)) + geom_bar() 
 
 
-ggplot(finalData, aes(x,y)) + 
+ggplot(finalData, aes(x,y)) + scale_y_reverse() + 
   geom_raster(aes(fill = weight), interpolate = FALSE) +
-  scale_fill_gradientn( colours=c("grey","yellow","blue"), limits=c(0,1000))
+  scale_fill_gradientn( colours=c("grey","yellow","blue"), limits=c(0,10000))
 ggsave("som_Density_cliped_1000.png", width = 6, height = 5)
 
 
