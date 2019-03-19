@@ -4,10 +4,25 @@ library(readr)
 library(ggplot2)
 library(scales)
 library('png')
+library(rgdal)
+library(surveillance)
+library(maptools)
+library(plyr)
+library(ellipse)
+library(fields)
+library(gpclib)
+library(ks)
+library(maps)
+library(rgeos)
+library(snow)
+library(sp)
+library(ggmap)
+library(reshape2)
 
 ### Load Data ####
 
-rawData <-  read_table2("~/Desktop/Projects/2018_Block_Typologies/Data/AllClusterLocations_22Dec2018.csv")
+rawData <- read_delim("~/Desktop/Projects/2019_Block_Typologies/Data/somClassifiedStops_1800KImg3200KItr.txt", 
+                          "\t", escape_double = FALSE, trim_ws = TRUE)
 rawData$x = rawData$x +1
 rawData$y = rawData$y +1
 
@@ -18,6 +33,28 @@ img1 <- readPNG('images/bremm.png')
 img2 <- readPNG('images/teulingfig2.png')
 img3 <- readPNG('images/cubediagonal.png')
 
+cityMerge <- read_csv("~/Desktop/Projects/2019_Block_Typologies/Data/Global_Cities_Pop_with_ID.csv")
+cityRaw <-  read_csv("~/Desktop/Projects/2019_Block_Typologies/Data/City_all_LatLon.csv")
+cityAge <- read_csv("~/Desktop/Projects/2019_Block_Typologies/Data/All_Cities_age_190306.csv")
+cityStatistics <- read_delim("~/Desktop/Projects/2019_Block_Typologies/Data/cityStatistics_190307.csv", 
+                             "\t", escape_double = FALSE, trim_ws = TRUE)
+cityStatistics_1 <- colsplit(cityStatistics$cityName, ",", names = c('city','country'))
+cityStatistics = cbind(cityStatistics_1,cityStatistics)  
+
+
+cityMerge <- merge(cityMerge,cityAge, by ="Rank", all=T)
+cityMerge$Country.y = NULL
+cityMerge$Country = cityMerge$Country.x
+cityMerge$Country.x = NULL
+cityMerge$Name.y = NULL
+cityMerge$Name = cityMerge$Name.x
+cityMerge$Name.x = NULL
+cityMerge$population.y = NULL
+cityMerge$population = cityMerge$population.x
+cityMerge$population.x = NULL
+cityMerge <- merge(cityMerge,cityStatistics, by.x = "Name", by.y = "Name", all=T)
+cityMerge <- merge(cityMerge,cityRaw, by.x = "Name", by.y = "Name", all=T)
+  
 ### function ####
 ### get colour from image
 
@@ -71,9 +108,9 @@ finalData$y = finalData$y-1
 ### Plotting ####
 
 ggplot(finalData, aes(cluster)) + geom_histogram()
-ggsave("som_histogram.png", width = 6, height = 5)
+ggsave("som_Cluster.png", width = 6, height = 5)
 
-ggplot(finalData, aes(x,y))+ scale_y_reverse() + geom_raster(aes(fill = weight), interpolate = FALSE) +scale_fill_gradient(low = "black",high = "red", limits=c(0,25000))
+ggplot(finalData, aes(x,y))+ scale_y_reverse() + geom_raster(aes(fill = weight), interpolate = FALSE) +scale_fill_gradient(low = "black",high = "red", limits=c(0,10000))
 ggsave("som_Density.png", width = 6, height = 5)
 
 ggplot(finalData, aes(x, y, fill = log(weight)))+ scale_y_reverse() + geom_raster() + scale_y_reverse()+scale_fill_gradient(low = "black",high = "red") 
@@ -106,7 +143,7 @@ ggsave("som_Density_cliped_1000.png", width = 6, height = 5)
 
 
 
-### hotspots in SOM ###
+### hotspots in SOM ####
 
 
 minClipNumber = 10000
@@ -120,3 +157,4 @@ for(i in 1 :nrow(tempSomDensity)){
   print(tempSomDensity[i,]$cluster)
   print(rawData[highDensityPoint,]$`image1,image2`)
 }
+
